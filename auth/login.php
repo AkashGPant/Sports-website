@@ -15,6 +15,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
     if ($user && password_verify($password, $user['password_hash'])) {
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['username'] = $user['username'];
+
+        // Remember Me Logic
+        if (isset($_POST['remember'])) {
+            $token = bin2hex(random_bytes(32));
+            $expiry = time() + (30 * 24 * 60 * 60); // 30 days
+            
+            // Store token in database
+            $stmt = $pdo->prepare("UPDATE users SET remember_token = ? WHERE user_id = ?");
+            $stmt->execute([$token, $user['user_id']]);
+            
+            // Set cookie
+            setcookie('remember_me', $token, $expiry, "/");
+        }
+
         header("Location: ../index.php");
         exit;
     } else {
@@ -43,6 +57,10 @@ include '../includes/header.php';
         <div class="form-group">
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
+        </div>
+        <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
+            <input type="checkbox" id="remember" name="remember" style="width: auto; margin: 0;">
+            <label for="remember" style="margin: 0; font-size: 0.9rem; color: var(--text-secondary);">Remember Me</label>
         </div>
         <button type="submit" name="login" class="btn btn-primary" style="width: 100%;">Login</button>
     </form>

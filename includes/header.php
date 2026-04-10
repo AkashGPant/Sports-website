@@ -2,6 +2,19 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// Auto-login from cookie
+if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_me']) && isset($pdo)) {
+    $token = $_COOKIE['remember_me'];
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE remember_token = ?");
+    $stmt->execute([$token]);
+    $user = $stmt->fetch();
+    
+    if ($user) {
+        $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['username'] = $user['username'];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

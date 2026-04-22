@@ -49,7 +49,7 @@ function format_detail($data) {
 }
 ?>
 
-<div class="match-details-container">
+<div class="match-details-container theme-<?php echo htmlspecialchars($type); ?>">
     <div class="details-hero" style="background-image: url('<?php echo htmlspecialchars($banner); ?>');">
         <div class="hero-overlay"></div>
         <div class="hero-content">
@@ -73,6 +73,22 @@ function format_detail($data) {
                     <h2>Match Description</h2>
                     <p class="description-text"><?php echo nl2br(htmlspecialchars($item['description'] ?: 'No description available for this event.')); ?></p>
                 </section>
+
+                <?php if (!empty($item['youtube_link'])): ?>
+                <section class="details-section" style="margin-top: 2rem;">
+                    <h2>Highlights / Video</h2>
+                    <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
+                        <?php
+                        $yt_url = $item['youtube_link'];
+                        $embed_url = $yt_url;
+                        if (preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i', $yt_url, $match)) {
+                            $embed_url = 'https://www.youtube.com/embed/' . $match[1];
+                        }
+                        ?>
+                        <iframe src="<?php echo htmlspecialchars($embed_url); ?>" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </section>
+                <?php endif; ?>
 
                 <section class="details-section">
                     <?php if ($type === 'f1'): ?>

@@ -16,15 +16,22 @@ $all_items = array_merge($cricket_matches, $football_matches, $f1_races);
 // Sort by ID or status if needed, but for now just show them
 ?>
 
-<section class="hero">
-    <h1>Experience Sports Like Never Before</h1>
-    <p>Live Scores, Highlights, and Exclusive Content for Cricket, Football, and F1.</p>
+<section class="hero has-bg-video">
+    <video autoplay loop muted playsinline class="hero-bg-video">
+        <source src="assets/images/generate_a_video_for_SSNAPP_w.mp4" type="video/mp4">
+    </video>
+    <div class="hero-video-overlay"></div>
     
-    <div class="search-container">
-        <form action="search.php" method="GET">
-            <input type="text" name="q" class="search-input" placeholder="Search for matches, teams, or players...">
-            <button type="submit" style="display:none;"></button>
-        </form>
+    <div class="hero-content-wrapper">
+        <h1>Experience Sports Like Never Before</h1>
+        <p>Live Scores, Highlights, and Exclusive Content for Cricket, Football, and F1.</p>
+        
+        <div class="search-container">
+            <form action="search.php" method="GET">
+                <input type="text" name="q" class="search-input" placeholder="Search for matches, teams, or players...">
+                <button type="submit" style="display:none;"></button>
+            </form>
+        </div>
     </div>
 </section>
 
